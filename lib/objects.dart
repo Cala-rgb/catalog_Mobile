@@ -1,19 +1,18 @@
 class Elev {
-  final int? id;
-  final String name;
-  final String clasa;
-  Elev({
-    this.id,
-    required this.name,
-    required this.clasa
-    });
-  //TODO: Sa-mi dau seama de ce e doua puncte aici ca ma depaseste =))
-  Elev.fromMap(Map<String, dynamic> res) :
-      id = res["id"],
-      name = res["name"],
-      clasa = res["clasa"];
-
-  Map<String, Object?> toMap() {
-    return {'id':id,'name': name, 'clasa': clasa};
+  int? id;
+  late String name, clasa;
+  Elev(this.id, this.name, this.clasa);
+  Elev.withoutId(this.name, this.clasa);
+  Elev.fromMap(Map<String, dynamic> m) {
+    id = m["id"];
+    name = m["name"];
+    clasa = m["clasa"];
+  }
+  Map<String, dynamic> toMap() {
+    Map<String, dynamic> map = <String, dynamic>{};
+    map["id"] = id;
+    map["name"] = name;
+    map["clasa"] = clasa;
+    return map;
   }
 }
