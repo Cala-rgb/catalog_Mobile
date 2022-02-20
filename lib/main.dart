@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:sqflite/sqflite.dart';
 import 'dbhandler.dart';
 import 'objects.dart';
@@ -542,6 +543,108 @@ class _SeeElev extends State<SeeElev> {
     );
   }
 
+  void stergeElev(int id) {
+    handler.deleteElev(id);
+    goBack();
+  }
+
+
+  //TODO: Sa fixez chestia asta
+  void adaugaNota(int id) {
+    var now = DateTime.now();
+    String data = now.day.toString() + "/" + now.month.toString() + "/" + now.year.toString();
+    showDialog(
+        context: context, barrierDismissible: true,
+        builder: (BuildContext context) {
+          return SimpleDialog(
+            title:const Text('Adauga nota'),
+            children: <Widget>[
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  handler.insertNota(id, 1, data);
+                  setState(() {});
+                },
+                child:const Text('1'),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  handler.insertNota(id, 2, data);
+                  setState(() {});
+                },
+                child:const Text('2'),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  handler.insertNota(id, 3, data);
+                  setState(() {});
+                },
+                child:const Text('3'),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  handler.insertNota(id, 4, data);
+                  setState(() {});
+                },
+                child:const Text('4'),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  handler.insertNota(id, 5, data);
+                  setState(() {});
+                },
+                child:const Text('5'),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  handler.insertNota(id, 6, data);
+                  setState(() {});
+                },
+                child:const Text('6'),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  handler.insertNota(id, 7, data);
+                  setState(() {});
+                },
+                child:const Text('7'),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  handler.insertNota(id, 8, data);
+                  setState(() {});
+                },
+                child:const Text('8'),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  handler.insertNota(id, 9, data);
+                  setState(() {});
+                },
+                child:const Text('9'),
+              ),
+              SimpleDialogOption(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  handler.insertNota(id, 10, data);
+                  setState(() {});
+                },
+                child:const Text('10'),
+              ),
+            ]
+          );
+        },
+    );
+  }
+
   @override
   void initState() {
     super.initState();
@@ -561,17 +664,21 @@ class _SeeElev extends State<SeeElev> {
           children: <Widget> [
             Container(
                 child: Row (
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    Text("Absente"),
-                ])
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: const <Widget>[
+                      Text(
+                          "Absente: ",
+                          style: TextStyle(fontSize: 16.0, fontStyle: FontStyle.italic))
+                    ])
             ),
-            Expanded(
+            Container(
               child: FutureBuilder(
                 future: this.handler.getAbsente(widget.index),
                 builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
                       itemCount: snapshot.data?.length,
                       itemBuilder: (BuildContext context, int index) {
                         return Row(
@@ -586,6 +693,64 @@ class _SeeElev extends State<SeeElev> {
                   }
                 },
               ),
+            ),
+            Container(
+                child: Row (
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      TextButton(
+                        style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all<Color>(Colors.green),
+                        ),
+                        onPressed: () {adaugaNota(widget.index);},
+                        child: Text("Adauga nota"),
+                      ),
+                    ])
+            ),
+            Container(
+                child: Row (
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: <Widget>[
+                      Text(
+                        "Note: ",
+                         style: TextStyle(fontSize: 16.0, fontStyle: FontStyle.italic))
+                    ])
+            ),
+            Container(
+              child: FutureBuilder(
+                future: this.handler.getNote(widget.index),
+                builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+                  if (snapshot.hasData) {
+                    return ListView.builder(
+                      scrollDirection: Axis.vertical,
+                      shrinkWrap: true,
+                      itemCount: snapshot.data?.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return Row(
+                            children: <Widget>[
+                              Text(snapshot.data![index]["nota"].toString() + " in " + snapshot.data![index]["data"])
+                            ]);
+                      },
+                    );
+                  }
+                  else {
+                    return Center(child: CircularProgressIndicator());
+                  }
+                },
+              ),
+            ),
+            Container(
+                child: Row (
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: <Widget>[
+                      TextButton(
+                        style: ButtonStyle(
+                          foregroundColor: MaterialStateProperty.all<Color>(Colors.red),
+                        ),
+                        onPressed: () {stergeElev(widget.index);},
+                        child: Text("Sterge elev"),
+                      ),
+                    ])
             ),
           ]),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,

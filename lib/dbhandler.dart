@@ -43,6 +43,13 @@ class DB_Handler {
     return result;
  }
 
+  Future<int> insertNota(int index, int nota, String date) async {
+    int result = 0;
+    final Database db = await initializeDatabase();
+    result = await db.insert('note', {"elev": index, "data": date, "nota": nota});
+    return result;
+  }
+
   Future<List<Elev>> getElevi(String clasa) async {
     final Database db = await initializeDatabase();
     final List<Map<String, Object?>> queryResult = await db.query('elevi', where: 'clasa = ?', whereArgs: [clasa], orderBy: 'name');
@@ -73,9 +80,14 @@ class DB_Handler {
     return absente;
   }
 
-  Future<void> deleteElevi() async {
-    final db = await initializeDatabase();
-    await db.delete('elevi');
+  Future<List<Map<String, dynamic>>> getNote(int index) async{
+    final Database db = await initializeDatabase();
+    final List<Map<String, Object?>> queryResult = await db.query('note', where: 'elev = ?', whereArgs: [index], orderBy: 'data');
+    List<Map<String, dynamic>> note = [];
+    for (Map<String, dynamic> m in queryResult) {
+      note.add({"nota": m["nota"], "data": m["data"]});
+    }
+    return note;
   }
 
   Future<void> deleteElev(int id) async {
@@ -85,5 +97,16 @@ class DB_Handler {
       where: "id = ?",
       whereArgs: [id],
     );
+    await db.delete(
+      'absente',
+      where: 'elev = ?',
+      whereArgs: [id],
+    );
+    await db.delete(
+      'note',
+      where: 'elev = ?',
+      whereArgs: [id],
+    );
   }
+
 }
