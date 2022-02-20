@@ -362,45 +362,44 @@ class _AddElev extends State<AddElev> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Row (
-          children: <Widget>[
-            Container(
-              width: 170.0,
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Nume',
-                ),
-                  onChanged: (value) {
-                  _nume = value;
-                }
-              )
-            ),
-            Container(
-              width: 170.0,
-              padding: const EdgeInsets.all(10),
-              child: TextField(
-                decoration: const InputDecoration(
-                   border: OutlineInputBorder(),
-                   labelText: 'Prenume',
-                ),
-                onChanged: (value) {
-                  _prenume = value;
-                }
-              )
-            ),
-            TextButton(
-              style: ButtonStyle(
-                foregroundColor: MaterialStateProperty.all<Color>(Colors.green),
+      body: Column (
+        children: <Widget>[
+          Row (
+            children: <Widget>[
+              Expanded(
+                child: TextField(
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Nume',
+                  ),
+                    onChanged: (value) {
+                    _nume = value;
+                  }
+                )
               ),
-              onPressed: () {
-                handler.insertElev(_nume + " " + _prenume, widget.clasa);
-                goBack();
-              },
-              child: Text("Adauga"),
+              Expanded(
+                child: TextField(
+                  decoration: const InputDecoration(
+                     border: OutlineInputBorder(),
+                     labelText: 'Prenume',
+                  ),
+                  onChanged: (value) {
+                    _prenume = value;
+                  }
+                )
+             ),
+         ]),
+          TextButton(
+            style: ButtonStyle(
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.green),
             ),
-          ]),
+            onPressed: () {
+              handler.insertElev(_nume + " " + _prenume, widget.clasa);
+              goBack();
+            },
+            child: Text("Adauga"),
+          ),
+      ]),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         // isExtended: true,
