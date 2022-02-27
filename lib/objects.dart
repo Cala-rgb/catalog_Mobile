@@ -8,11 +8,28 @@ class Elev {
     name = m["name"];
     clasa = m["clasa"];
   }
-  Map<String, dynamic> toMap() {
-    Map<String, dynamic> map = <String, dynamic>{};
-    map["id"] = id;
-    map["name"] = name;
-    map["clasa"] = clasa;
-    return map;
+}
+
+class Absenta {
+  int? id;
+  late String data;
+  Absenta(this.id, this.data);
+  Absenta.withoutId(this.data);
+  Absenta.fromMap(Map<String, dynamic> m) {
+    id = m["id"];
+    data = m["data"];
+  }
+}
+
+class Nota {
+  int? id;
+  late String data;
+  late int nota;
+  Nota(this.id, this.data, this.nota);
+  Nota.withoutId(this.data, this.nota);
+  Nota.fromMap(Map<String, dynamic> m) {
+    id = m["id"];
+    data = m["data"];
+    nota = m["nota"];
   }
 }

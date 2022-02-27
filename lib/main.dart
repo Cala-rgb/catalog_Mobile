@@ -547,6 +547,15 @@ class _SeeElev extends State<SeeElev> {
     goBack();
   }
 
+  void stergeNota(int id) {
+    handler.deleteNota(id);
+    setState(() {});
+  }
+
+  void stergeAbsenta(int id) {
+    handler.deleteAbsenta(id);
+    setState(() {});
+  }
 
   //TODO: Sa fixez chestia asta
   void adaugaNota(int id) {
@@ -667,13 +676,14 @@ class _SeeElev extends State<SeeElev> {
                     children: const <Widget>[
                       Text(
                           "Absente: ",
-                          style: TextStyle(fontSize: 16.0, fontStyle: FontStyle.italic))
+                          style: TextStyle(fontSize: 16.0, fontStyle: FontStyle.italic)
+                      ),
                     ])
             ),
             Container(
               child: FutureBuilder(
                 future: this.handler.getAbsente(widget.index),
-                builder: (BuildContext context, AsyncSnapshot<List<String>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<Absenta>> snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
                       scrollDirection: Axis.vertical,
@@ -682,7 +692,11 @@ class _SeeElev extends State<SeeElev> {
                       itemBuilder: (BuildContext context, int index) {
                         return Row(
                             children: <Widget>[
-                              Text(snapshot.data![index])
+                              Text(snapshot.data![index].data),
+                              IconButton(
+                                icon: Icon(Icons.delete_forever),
+                                onPressed: () {stergeAbsenta(snapshot.data![index].id!);},
+                              ),
                         ]);
                       },
                     );
@@ -718,7 +732,7 @@ class _SeeElev extends State<SeeElev> {
             Container(
               child: FutureBuilder(
                 future: this.handler.getNote(widget.index),
-                builder: (BuildContext context, AsyncSnapshot<List<Map<String, dynamic>>> snapshot) {
+                builder: (BuildContext context, AsyncSnapshot<List<Nota>> snapshot) {
                   if (snapshot.hasData) {
                     return ListView.builder(
                       scrollDirection: Axis.vertical,
@@ -727,7 +741,11 @@ class _SeeElev extends State<SeeElev> {
                       itemBuilder: (BuildContext context, int index) {
                         return Row(
                             children: <Widget>[
-                              Text(snapshot.data![index]["nota"].toString() + " in " + snapshot.data![index]["data"])
+                              Text(snapshot.data![index].nota.toString() + " in " + snapshot.data![index].data),
+                              IconButton(
+                                icon: Icon(Icons.delete_forever),
+                                onPressed: () {stergeNota(snapshot.data![index].id!);},
+                              ),
                             ]);
                       },
                     );

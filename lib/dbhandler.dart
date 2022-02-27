@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart';
 import 'objects.dart';
@@ -70,22 +71,22 @@ class DB_Handler {
       return clase;
   }
 
-  Future<List<String>> getAbsente(int index) async {
+  Future<List<Absenta>> getAbsente(int index) async {
     final Database db = await initializeDatabase();
     final List<Map<String, Object?>> queryResult = await db.query('absente', where: 'elev = ?', whereArgs: [index], orderBy: 'data');
-    List<String> absente = [];
+    List<Absenta> absente = [];
     for (Map<String, dynamic> m in queryResult) {
-      absente.add(m["data"]);
+      absente.add(Absenta.fromMap(m));
     }
     return absente;
   }
 
-  Future<List<Map<String, dynamic>>> getNote(int index) async{
+  Future<List<Nota>> getNote(int index) async{
     final Database db = await initializeDatabase();
     final List<Map<String, Object?>> queryResult = await db.query('note', where: 'elev = ?', whereArgs: [index], orderBy: 'data');
-    List<Map<String, dynamic>> note = [];
+    List<Nota> note = [];
     for (Map<String, dynamic> m in queryResult) {
-      note.add({"nota": m["nota"], "data": m["data"]});
+      note.add(Nota.fromMap(m));
     }
     return note;
   }
@@ -106,6 +107,24 @@ class DB_Handler {
       'note',
       where: 'elev = ?',
       whereArgs: [id],
+    );
+  }
+
+  Future<void> deleteAbsenta(int id) async {
+    final db = await initializeDatabase();
+    await db.delete(
+        'absente',
+        where: 'id = ?',
+        whereArgs: [id]
+    );
+  }
+
+  Future<void> deleteNota(int id) async {
+    final db = await initializeDatabase();
+    await db.delete(
+      'note',
+      where: 'id = ?',
+      whereArgs: [id]
     );
   }
 
